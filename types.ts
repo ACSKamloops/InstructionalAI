@@ -12,6 +12,36 @@ export enum ToolType {
   LESSON_PLANNER = 'LESSON_PLANNER'
 }
 
+// Translation modes for REMIX tool
+export enum TranslationMode {
+  ACADEMIC_VERNACULAR = 'academic_vernacular',
+  TECHNICAL_NARRATIVE = 'technical_narrative',
+  LEGAL_OPERATIONAL = 'legal_operational'
+}
+
+// Challenge intensity levels for BLIND_SPOT tool
+export enum ChallengeIntensity {
+  GENTLE = 'gentle',
+  MODERATE = 'moderate',
+  RIGOROUS = 'rigorous'
+}
+
+// Agent configuration for Gemini API calls
+export interface AgentConfig {
+  temperature?: number;
+  maxOutputTokens?: number;
+  topP?: number;
+  topK?: number;
+}
+
+// Fidelity report for tracking translation accuracy
+export interface FidelityReport {
+  originalClaims: string[];
+  translatedClaims: string[];
+  distortions: string[];
+  confidenceLevel: number;
+}
+
 export interface ChatMessage {
   role: 'user' | 'model' | 'system';
   content: string;
