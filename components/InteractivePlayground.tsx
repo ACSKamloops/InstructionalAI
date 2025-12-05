@@ -5,8 +5,8 @@ import { generateGeminiResponse } from '../services/geminiService';
 import { TOOLS } from '../data/tools';
 import { SCENARIOS } from '../data/scenarios';
 import { constructPrompt, getSystemInstruction } from '../utils/promptGenerator';
-import { RemixInputs, InterestSkinInputs, ProjectBreakerInputs, RubricInputs, EmailInputs, DeepDiverInputs } from './ToolInputs';
-import { Play, RotateCcw, Sparkles, AlertCircle, Eye, EyeOff, BrainCircuit, Mic, Link, Bone, Network, Activity, Volume2, RefreshCw, Shield, Lightbulb, Zap, BookOpen, Layers, Gamepad2, Ear, CheckSquare, Mail } from 'lucide-react';
+import { RemixInputs, InterestSkinInputs, ProjectBreakerInputs, RubricInputs, EmailInputs, DeepDiverInputs, MetaphorMapperInputs, BlindSpotInputs, SyntaxScaffolderInputs } from './ToolInputs';
+import { Play, RotateCcw, Sparkles, AlertCircle, Eye, EyeOff, BrainCircuit, Mic, Link, Bone, Network, Activity, Volume2, RefreshCw, Shield, Lightbulb, Zap, BookOpen, Layers, Gamepad2, Ear, CheckSquare, Mail, MessageSquare } from 'lucide-react';
 
 const InteractivePlayground: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ToolType>(ToolType.REMIX);
@@ -24,6 +24,8 @@ const InteractivePlayground: React.FC = () => {
     if (!scenarios || scenarios.length === 0) {
         // Initialize default empty state for tool if no scenarios
         if (tool === ToolType.DEEP_DIVER) setInputData({ mode: 'slow', scenario: '' });
+        else if (tool === ToolType.METAPHOR_MAPPER) setInputData({ strictness: 'strict' });
+        else if (tool === ToolType.SYNTAX_SCAFFOLDER) setInputData({ difficulty: 'Beginner' });
         else setInputData({});
         return;
     }
@@ -99,6 +101,9 @@ const InteractivePlayground: React.FC = () => {
         case 'Ear': return <Ear className={className} />;
         case 'CheckSquare': return <CheckSquare className={className} />;
         case 'Mail': return <Mail className={className} />;
+        case 'Network': return <Network className={className} />;
+        case 'Eye': return <Eye className={className} />;
+        case 'MessageSquare': return <MessageSquare className={className} />;
         default: return <BookOpen className={className} />;
     }
   };
@@ -111,6 +116,9 @@ const InteractivePlayground: React.FC = () => {
       if (metaphor === 'The Stethoscope') return <Volume2 className="text-rose-600" size={32} />;
       if (metaphor === 'The Mirror') return <RefreshCw className="text-indigo-600" size={32} />;
       if (metaphor === 'The Shield') return <Shield className="text-stone-600" size={32} />;
+      if (metaphor === 'The Bridge') return <Network className="text-violet-600" size={32} />;
+      if (metaphor === 'The Red Team') return <Eye className="text-rose-600" size={32} />;
+      if (metaphor === 'The Scaffold') return <MessageSquare className="text-teal-600" size={32} />;
       return <Lightbulb className="text-amber-500" size={32} />;
   }
 
@@ -265,7 +273,10 @@ const InteractivePlayground: React.FC = () => {
               <div className="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm space-y-5">
                 {activeTool === ToolType.REMIX && <RemixInputs data={inputData} onChange={handleInputChange} />}
                 {activeTool === ToolType.INTEREST_SKIN && <InterestSkinInputs data={inputData} onChange={handleInputChange} />}
+                {activeTool === ToolType.METAPHOR_MAPPER && <MetaphorMapperInputs data={inputData} onChange={handleInputChange} />}
                 {activeTool === ToolType.PROJECT_BREAKER && <ProjectBreakerInputs data={inputData} onChange={handleInputChange} />}
+                {activeTool === ToolType.BLIND_SPOT && <BlindSpotInputs data={inputData} onChange={handleInputChange} />}
+                {activeTool === ToolType.SYNTAX_SCAFFOLDER && <SyntaxScaffolderInputs data={inputData} onChange={handleInputChange} />}
                 {activeTool === ToolType.RUBRIC_ARCHITECT && <RubricInputs data={inputData} onChange={handleInputChange} />}
                 {activeTool === ToolType.DIFFICULT_EMAIL && <EmailInputs data={inputData} onChange={handleInputChange} />}
                 {activeTool === ToolType.DEEP_DIVER && <DeepDiverInputs data={inputData} onChange={handleInputChange} />}
@@ -342,7 +353,7 @@ const InteractivePlayground: React.FC = () => {
                   <div className="bg-stone-50 p-6 rounded-3xl mb-4 border border-stone-100">
                      {renderIcon(currentToolDef.icon, "w-8 h-8 text-stone-300")}
                   </div>
-                  <h3 className="font-serif font-bold text-stone-400 text-lg mb-2">Ready to {currentToolDef.title.split(":")[1]}</h3>
+                  <h3 className="font-serif font-bold text-stone-400 text-lg mb-2">Ready to {currentToolDef.title.split(":")[1] || currentToolDef.title}</h3>
                   <p className="text-sm text-stone-400 max-w-xs leading-relaxed">
                     Configure the parameters on the left (The Map) to guide the Nexus.
                   </p>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Bone, Gamepad2, Thermometer, BrainCircuit, Zap } from 'lucide-react';
+import { Bone, Gamepad2, Thermometer, BrainCircuit, Zap, Network, Eye, MessageSquare } from 'lucide-react';
 
 interface InputProps {
     data: any;
@@ -75,6 +75,43 @@ export const InterestSkinInputs: React.FC<InputProps> = ({ data, onChange }) => 
     </>
 );
 
+export const MetaphorMapperInputs: React.FC<InputProps> = ({ data, onChange }) => (
+    <>
+        <div className="p-4 rounded-xl bg-violet-50/50 border border-violet-100">
+            <div className="flex items-center gap-2 mb-2">
+                <Network size={14} className="text-violet-600"/>
+                <label className="block text-[10px] font-bold text-violet-900 uppercase tracking-wider">Target System (Complex)</label>
+            </div>
+            <input 
+            className="w-full p-2.5 border border-stone-200 rounded-lg text-sm bg-white"
+            value={data.target || ''}
+            onChange={(e) => onChange('target', e.target.value)}
+            placeholder="e.g. Human Immune System"
+            />
+        </div>
+        <div className="p-4 rounded-xl bg-stone-50 border border-stone-100">
+            <label className="block text-[10px] font-bold text-stone-500 mb-2 uppercase tracking-wider">Base System (Familiar)</label>
+            <input 
+            className="w-full p-2.5 border border-stone-200 rounded-lg text-sm bg-white"
+            value={data.base || ''}
+            onChange={(e) => onChange('base', e.target.value)}
+            placeholder="e.g. A Hockey Team"
+            />
+        </div>
+        <div>
+            <label className="block text-[11px] font-bold text-stone-500 mb-2 uppercase tracking-wide">Mapping Strictness</label>
+            <select
+                className="w-full p-3 border border-stone-200 rounded-xl text-sm bg-stone-50"
+                value={data.strictness || 'strict'}
+                onChange={(e) => onChange('strictness', e.target.value)}
+            >
+                <option value="strict">Strict (1:1 Functional)</option>
+                <option value="loose">Loose (Conceptual)</option>
+            </select>
+        </div>
+    </>
+);
+
 export const ProjectBreakerInputs: React.FC<InputProps> = ({ data, onChange }) => (
     <>
         <div>
@@ -92,6 +129,82 @@ export const ProjectBreakerInputs: React.FC<InputProps> = ({ data, onChange }) =
             value={data.time || ''}
             onChange={(e) => onChange('time', e.target.value)}
             />
+        </div>
+    </>
+);
+
+export const BlindSpotInputs: React.FC<InputProps> = ({ data, onChange }) => (
+    <>
+        <div>
+            <label className="block text-[11px] font-bold text-stone-500 mb-2 uppercase tracking-wide">Student Argument/Text</label>
+            <textarea 
+            className="w-full p-3.5 border border-stone-200 rounded-xl text-sm h-28 focus:ring-rose-500/20 bg-stone-50 resize-none"
+            value={data.text || ''}
+            onChange={(e) => onChange('text', e.target.value)}
+            placeholder="Paste student work or summary..."
+            />
+        </div>
+        <div className="grid grid-cols-1 gap-4">
+            <div>
+                <label className="block text-[11px] font-bold text-stone-500 mb-2 uppercase tracking-wide">Topic</label>
+                <input 
+                    className="w-full p-3 border border-stone-200 rounded-xl text-sm bg-stone-50"
+                    value={data.topic || ''}
+                    onChange={(e) => onChange('topic', e.target.value)}
+                />
+            </div>
+            <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
+                <div className="flex items-center gap-2 mb-2">
+                    <Eye size={14} className="text-rose-600"/>
+                    <label className="block text-[10px] font-bold text-rose-900 uppercase tracking-wider">Required Lenses (To Scan For)</label>
+                </div>
+                <input 
+                    className="w-full p-2.5 border border-stone-200 rounded-lg text-sm bg-white"
+                    value={data.perspectives || ''}
+                    onChange={(e) => onChange('perspectives', e.target.value)}
+                    placeholder="e.g. Ecological, Indigenous, Economic"
+                />
+            </div>
+        </div>
+    </>
+);
+
+export const SyntaxScaffolderInputs: React.FC<InputProps> = ({ data, onChange }) => (
+    <>
+        <div className="p-4 rounded-xl bg-teal-50/50 border border-teal-100 mb-4">
+            <div className="flex items-center gap-2 mb-2">
+                <MessageSquare size={14} className="text-teal-600"/>
+                <label className="block text-[10px] font-bold text-teal-900 uppercase tracking-wider">Grammar Rule</label>
+            </div>
+            <input 
+            className="w-full p-2.5 border border-stone-200 rounded-lg text-sm bg-white"
+            value={data.rule || ''}
+            onChange={(e) => onChange('rule', e.target.value)}
+            placeholder="e.g. Transitive Verbs"
+            />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+            <div>
+                <label className="block text-[11px] font-bold text-stone-500 mb-2 uppercase tracking-wide">Context</label>
+                <input 
+                    className="w-full p-3 border border-stone-200 rounded-xl text-sm bg-stone-50"
+                    value={data.context || ''}
+                    onChange={(e) => onChange('context', e.target.value)}
+                    placeholder="e.g. Fishing"
+                />
+            </div>
+            <div>
+                <label className="block text-[11px] font-bold text-stone-500 mb-2 uppercase tracking-wide">Difficulty</label>
+                <select
+                    className="w-full p-3 border border-stone-200 rounded-xl text-sm bg-stone-50"
+                    value={data.difficulty || 'Beginner'}
+                    onChange={(e) => onChange('difficulty', e.target.value)}
+                >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
         </div>
     </>
 );

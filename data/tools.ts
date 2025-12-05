@@ -25,6 +25,17 @@ export const TOOLS: ToolDefinition[] = [
     color: "bg-amber-50 text-amber-900 border-amber-200 ring-amber-500"
   },
   {
+    id: ToolType.METAPHOR_MAPPER,
+    title: "Metaphor Mapper",
+    subtitle: "Systems Thinking via Analogies",
+    description: "Map complex systems (e.g., Biology) onto familiar domains (e.g., Sports) to test deep conceptual understanding.",
+    technicalMechanism: "Analogical Mapping",
+    visualMetaphor: "The Bridge",
+    whyItWorks: "This tool forces the AI to identify functional relationships, not just surface similarities. It creates a strict 1:1 mapping between two distinct domains to reveal the underlying system architecture.",
+    icon: "Network",
+    color: "bg-violet-50 text-violet-900 border-violet-200 ring-violet-500"
+  },
+  {
     id: ToolType.PROJECT_BREAKER,
     title: "The Project Breaker",
     subtitle: "Support via Decomposition",
@@ -34,6 +45,28 @@ export const TOOLS: ToolDefinition[] = [
     whyItWorks: "We use 'Tree-of-Thought' to visualize the project not as a mountain, but as branches. We break the monolith into Phases (Branches) and then into Micro-steps (Leaves).",
     icon: "BrainCircuit",
     color: "bg-emerald-50 text-emerald-900 border-emerald-200 ring-emerald-500"
+  },
+  {
+    id: ToolType.BLIND_SPOT,
+    title: "Blind Spot Detector",
+    subtitle: "Critical Thinking via Adversarial Analysis",
+    description: "Analyze student arguments to identify missing perspectives (Economic, Ecological, Social) without writing the content for them.",
+    technicalMechanism: "Adversarial Analysis",
+    visualMetaphor: "The Red Team",
+    whyItWorks: "Uses Chain-of-Verification to scan an argument against a list of required lenses (e.g., Colonial, Ecological). It identifies the 'absence' of a lens and generates challenge questions instead of answers.",
+    icon: "Eye",
+    color: "bg-rose-50 text-rose-900 border-rose-200 ring-rose-500"
+  },
+  {
+    id: ToolType.SYNTAX_SCAFFOLDER,
+    title: "Syntax Scaffolder",
+    subtitle: "Language Revitalization Support",
+    description: "Generate English bridge scenarios that force specific grammatical structures for language practice, avoiding direct translation risks.",
+    technicalMechanism: "Constraint Satisfaction",
+    visualMetaphor: "The Scaffold",
+    whyItWorks: "We cannot ask AI to write in local languages (it hallucinates). Instead, we use it to generate precise English scenarios that set up the student to practice a specific grammar rule taught by Elders.",
+    icon: "MessageSquare",
+    color: "bg-teal-50 text-teal-900 border-teal-200 ring-teal-500"
   },
   {
     id: ToolType.RUBRIC_ARCHITECT,

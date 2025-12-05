@@ -4,11 +4,17 @@ import { ToolType } from '../types';
 export const getSystemInstruction = (tool: ToolType): string => {
     switch (tool) {
       case ToolType.REMIX:
-        return "You are an expert Special Education teacher and Nlaka'pamux curriculum specialist. You strictly follow Chain-of-Thought reasoning. You must Identify terms first, then Strategize, then Remix, then Verify.";
+        return "You are an expert Special Education teacher and local curriculum specialist. You strictly follow Chain-of-Thought reasoning. You must Identify terms first, then Strategize, then Remix, then Verify.";
       case ToolType.INTEREST_SKIN:
         return "You are a Creative Math Designer who specializes in gamified learning. You strictly adhere to 'Structure Precedes Content'. The academic logic must remain immutable, while the narrative skin changes to match the student's interest.";
+      case ToolType.METAPHOR_MAPPER:
+        return "You are a Systems Thinking Expert. You specialize in Analogical Mapping. You must map the functions of a Target System onto a Base System with strict adherence to functional relationships. You must identify where the metaphor fails (Gap Analysis).";
       case ToolType.PROJECT_BREAKER:
         return "You are an expert Executive Function Coach. You use Tree-of-Thought decomposition to break large tasks into parallel branches (Phases) and then into micro-steps. Your output must be a 'Quest Log'.";
+      case ToolType.BLIND_SPOT:
+        return "You are a Critical Debate Coach and Red Team Analyst. You analyze student arguments to identify 'Blind Spots'—perspectives or data that are missing. You DO NOT write the content; you generate Challenge Questions to force the student to think deeper.";
+      case ToolType.SYNTAX_SCAFFOLDER:
+        return "You are a Linguistics Drill Instructor for language revitalization. You generally DO NOT speak the local language. You speak English. Your task is to generate English 'Bridge Scenarios' that set up a student to practice specific grammar rules. You must NOT translate.";
       case ToolType.RUBRIC_ARCHITECT:
         return "You are a Curriculum Assessment Specialist. You use 'Iterative Verification'. You never accept the first draft. You always critique it for age-appropriateness and simplicity before finalizing.";
       case ToolType.DIFFICULT_EMAIL:
@@ -44,6 +50,15 @@ Output Format:
 - The Mission (The Problem)
 - The Hint`;
 
+      case ToolType.METAPHOR_MAPPER:
+        return `Task: Explain [Target System: ${inputs.target}] by mapping it to [Base System: ${inputs.base}].
+        
+Constraint - Functional Isomorphism (${inputs.strictness}):
+1. Identify 4 key actors in the Target System.
+2. Identify 4 key actors in the Base System that correspond functionally.
+3. Interaction Analysis: Explain "When A does [Action], it is like when B does [Action] because..."
+4. Gap Analysis: Explicitly state one way this metaphor FAILS (where the comparison breaks down).`;
+
       case ToolType.PROJECT_BREAKER:
         return `Task: Break down this assignment into a "Tree of Steps": "${inputs.task}" due in ${inputs.time}.
 
@@ -51,6 +66,29 @@ Technique: Tree-of-Thought Decomposition.
 1. Create 3 main Branches (Phases).
 2. Break each branch into micro-tasks (20 mins each).
 Output: Present this as a "Quest Log" checklist. Keep the tone encouraging.`;
+
+      case ToolType.BLIND_SPOT:
+        return `Task: Identify the "Blind Spots" in this student argument about: ${inputs.topic}.
+
+Input Text: "${inputs.text}"
+
+Process:
+1. Summarize the student's core thesis.
+2. Scan for these perspectives: ${inputs.perspectives}.
+3. Detect Absence: Which lens is missing or under-represented?
+4. Output: Generate 3 specific "Challenge Questions" that force the student to consider that missing lens. DO NOT write the essay for them.`;
+
+      case ToolType.SYNTAX_SCAFFOLDER:
+        return `Task: Create 5 "Translation Scenarios" for a student to practice [Grammar Rule: ${inputs.rule}].
+
+Context: ${inputs.context}.
+Difficulty: ${inputs.difficulty}.
+
+Method:
+1. Generate a short English sentence that *forces* the use of the specific rule (e.g. requires a transitive object).
+2. Do NOT provide the translation.
+3. Provide a visual description of the scene so the student can visualize the action.
+4. Verify: Ensure the English sentence isn't passive voice if that confuses the rule.`;
 
       case ToolType.RUBRIC_ARCHITECT:
         return `Task: Create a student-friendly rubric for: "${inputs.criteria}".

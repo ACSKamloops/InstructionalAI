@@ -86,6 +86,72 @@ export const SCENARIOS: Record<ToolType, Scenario[]> = {
             }
         }
     ],
+    [ToolType.METAPHOR_MAPPER]: [
+        {
+            id: 'immune_hockey',
+            label: 'Scenario: Immune System (Science)',
+            teacherStory: "Teaching Grade 11 Biology. Students memorize the terms (T-Cells, Antigens) but don't understand the *function*. Most of the class plays hockey.",
+            data: {
+                target: 'The Human Immune System',
+                base: 'A Hockey Team (Defense Strategy)',
+                strictness: 'strict'
+            }
+        },
+        {
+            id: 'cell_city',
+            label: 'Scenario: Cell Biology (Science)',
+            teacherStory: "Grade 8 Science. Need to explain cell organelles. Students are familiar with how the Band Office and community services work.",
+            data: {
+                target: 'Plant Cell Organelles',
+                base: 'The Band Office and Community Infrastructure',
+                strictness: 'loose'
+            }
+        }
+    ],
+    [ToolType.BLIND_SPOT]: [
+        {
+            id: 'dam_essay',
+            label: 'Scenario: Hydro Dam Essay (Socials)',
+            teacherStory: "Grade 10 Social Studies. Students are writing about hydroelectric power. Their drafts focus entirely on economic benefits and ignore ecological or Indigenous impacts.",
+            data: {
+                topic: 'The Economic Benefits of the Site C Dam',
+                text: 'The Site C dam will provide clean energy for thousands of homes and create jobs during construction. It contributes to the province\'s GDP and allows for energy export.',
+                perspectives: 'Ecological Impact, Indigenous Land Rights, Long-term Sustainability'
+            }
+        },
+        {
+            id: 'ai_policy',
+            label: 'Scenario: School AI Policy (Leadership)',
+            teacherStory: "Leadership students drafting a policy on AI use. They focus on 'cheating' but miss privacy and data sovereignty.",
+            data: {
+                topic: 'Rules for AI in Class',
+                text: 'Students should not use AI to write essays because it is cheating. If they use it, they will get a zero.',
+                perspectives: 'Data Privacy, Provenance Debt, Equity of Access'
+            }
+        }
+    ],
+    [ToolType.SYNTAX_SCAFFOLDER]: [
+        {
+            id: 'transitive_verbs',
+            label: 'Scenario: Transitive Verbs (Language)',
+            teacherStory: "Elders are teaching the rule for 'Doing something TO something' (Transitive). Students need practice scenarios to say the phrase, without AI hallucinating the translation.",
+            data: {
+                rule: 'Transitive Verbs (Subject acts on Object)',
+                context: 'Fishing at the river',
+                difficulty: 'Beginner'
+            }
+        },
+        {
+            id: 'command_form',
+            label: 'Scenario: Command Form (Language)',
+            teacherStory: "Practice for 'Imperative/Command' forms in the local language. Context: Kitchen/Cooking.",
+            data: {
+                rule: 'Imperative / Commands (Telling someone to do something)',
+                context: 'Cooking a meal in the kitchen',
+                difficulty: 'Intermediate'
+            }
+        }
+    ],
     [ToolType.PROJECT_BREAKER]: [
         {
             id: 'science_fair',
