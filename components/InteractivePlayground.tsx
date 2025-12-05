@@ -119,12 +119,22 @@ const InteractivePlayground: React.FC = () => {
     }
   };
 
+  // State for export feedback
+  const [exportStatus, setExportStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
   // Export generated content to clipboard
-  const handleExport = () => {
+  const handleExport = async () => {
     const lastModelMessage = [...messages].reverse().find(m => m.role === 'model' && !m.isError);
     if (lastModelMessage) {
-      navigator.clipboard.writeText(lastModelMessage.content);
-      // Could add a toast notification here
+      try {
+        await navigator.clipboard.writeText(lastModelMessage.content);
+        setExportStatus('success');
+        setTimeout(() => setExportStatus('idle'), 2000);
+      } catch (err) {
+        console.error('Failed to copy to clipboard:', err);
+        setExportStatus('error');
+        setTimeout(() => setExportStatus('idle'), 2000);
+      }
     }
   };
 
@@ -394,10 +404,17 @@ const InteractivePlayground: React.FC = () => {
                   <>
                     <button 
                       onClick={handleExport}
-                      className="text-[10px] uppercase font-bold tracking-wider text-stone-400 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-full hover:bg-blue-50 flex items-center gap-1"
+                      className={`text-[10px] uppercase font-bold tracking-wider transition-colors px-3 py-1.5 rounded-full flex items-center gap-1 ${
+                        exportStatus === 'success' 
+                          ? 'text-green-600 bg-green-50' 
+                          : exportStatus === 'error'
+                          ? 'text-red-600 bg-red-50'
+                          : 'text-stone-400 hover:text-blue-600 hover:bg-blue-50'
+                      }`}
                       title="Copy to clipboard"
                     >
-                      <Download size={12} /> Export
+                      <Download size={12} /> 
+                      {exportStatus === 'success' ? 'Copied!' : exportStatus === 'error' ? 'Failed' : 'Export'}
                     </button>
                     <button 
                       onClick={handleRegenerate}

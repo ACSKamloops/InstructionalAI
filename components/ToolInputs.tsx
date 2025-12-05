@@ -184,9 +184,12 @@ export const ProjectBreakerInputs: React.FC<InputProps> = ({ data, onChange }) =
                             type="checkbox"
                             checked={(data.domains || 'Technical, Community').includes(domain)}
                             onChange={(e) => {
-                                const currentDomains = (data.domains || 'Technical, Community').split(', ');
+                                const currentDomains = (data.domains || 'Technical, Community').split(', ').filter(d => d.trim());
                                 if (e.target.checked) {
-                                    onChange('domains', [...currentDomains.filter(d => d !== domain), domain].join(', '));
+                                    // Only add if not already present
+                                    if (!currentDomains.includes(domain)) {
+                                        onChange('domains', [...currentDomains, domain].join(', '));
+                                    }
                                 } else {
                                     onChange('domains', currentDomains.filter(d => d !== domain).join(', '));
                                 }
