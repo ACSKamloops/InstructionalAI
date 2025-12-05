@@ -1,12 +1,11 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { ToolType, ChatMessage } from '../types';
-import { generateGeminiResponse } from '../services/geminiService';
+import { ToolType, ChatMessage, AgentConfig } from '../types';
+import { generateGeminiResponse, getTemperatureForTask } from '../services/geminiService';
 import { TOOLS } from '../data/tools';
 import { SCENARIOS } from '../data/scenarios';
 import { constructPrompt, getSystemInstruction } from '../utils/promptGenerator';
 import { RemixInputs, InterestSkinInputs, ProjectBreakerInputs, RubricInputs, EmailInputs, DeepDiverInputs, MetaphorMapperInputs, BlindSpotInputs, SyntaxScaffolderInputs } from './ToolInputs';
-import { Play, RotateCcw, Sparkles, AlertCircle, Eye, EyeOff, BrainCircuit, Mic, Link, Bone, Network, Activity, Volume2, RefreshCw, Shield, Lightbulb, Zap, BookOpen, Layers, Gamepad2, Ear, CheckSquare, Mail, MessageSquare } from 'lucide-react';
+import { Play, RotateCcw, Sparkles, AlertCircle, Eye, EyeOff, BrainCircuit, Mic, Link, Bone, Network, Activity, Volume2, RefreshCw, Shield, Lightbulb, Zap, BookOpen, Layers, Gamepad2, Ear, CheckSquare, Mail, MessageSquare, Download, RotateCw } from 'lucide-react';
 
 const InteractivePlayground: React.FC = () => {
   const [activeTool, setActiveTool] = useState<ToolType>(ToolType.REMIX);
@@ -71,20 +70,71 @@ const InteractivePlayground: React.FC = () => {
     const userPrompt = constructPrompt(activeTool, inputData);
     
     // Add user message to UI
-    let displayPrompt = `Running ${currentToolDef.title}...`;
+    const displayPrompt = `Running ${currentToolDef.title}...`;
     setMessages(prev => [...prev, { role: 'user', content: displayPrompt }]);
+
+    // Determine appropriate temperature based on tool type
+    const getToolTemperature = (): 'logic' | 'balanced' | 'creative' => {
+      switch (activeTool) {
+        case ToolType.BLIND_SPOT:
+        case ToolType.DEEP_DIVER:
+          return 'logic'; // Analytical tasks need lower temperature
+        case ToolType.INTEREST_SKIN:
+        case ToolType.METAPHOR_MAPPER:
+          return 'creative'; // Creative tasks benefit from higher temperature
+        default:
+          return 'balanced';
+      }
+    };
+
+    const config: AgentConfig = {
+      temperature: getTemperatureForTask(getToolTemperature()),
+    };
 
     try {
       const response = await generateGeminiResponse(
         'gemini-2.5-flash',
         userPrompt,
-        getSystemInstruction(activeTool)
+        getSystemInstruction(activeTool),
+        config
       );
       setMessages(prev => [...prev, { role: 'model', content: response }]);
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'model', content: "The Nexus encountered a disruption. Please try again.", isError: true }]);
+    } catch (error: any) {
+      const errorMessage = error.message || "The Nexus encountered a disruption.";
+      const troubleshootingTips = `
+
+**Troubleshooting Tips:**
+- Check your API_KEY environment variable
+- Verify your network connection
+- Try again in a few moments
+- If the issue persists, check your API quota`;
+      
+      setMessages(prev => [...prev, { 
+        role: 'model', 
+        content: `Error: ${errorMessage}${troubleshootingTips}`, 
+        isError: true 
+      }]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Export generated content to clipboard
+  const handleExport = () => {
+    const lastModelMessage = [...messages].reverse().find(m => m.role === 'model' && !m.isError);
+    if (lastModelMessage) {
+      navigator.clipboard.writeText(lastModelMessage.content);
+      // Could add a toast notification here
+    }
+  };
+
+  // Regenerate with different approach
+  const handleRegenerate = async () => {
+    const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+    if (lastUserMessage) {
+      // Clear the last response and regenerate
+      setMessages(prev => prev.slice(0, -1));
+      await handleRun();
     }
   };
 
@@ -339,12 +389,33 @@ const InteractivePlayground: React.FC = () => {
                 <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-[#D97706] animate-ping' : 'bg-[#D97706]'}`}></div>
                 Nexus Output Stream
               </span>
-              <button 
-                onClick={() => setMessages([])} 
-                className="text-[10px] uppercase font-bold tracking-wider text-stone-400 hover:text-red-500 transition-colors px-3 py-1.5 rounded-full hover:bg-red-50"
-              >
-                Clear History
-              </button>
+              <div className="flex items-center gap-2">
+                {messages.some(m => m.role === 'model' && !m.isError) && (
+                  <>
+                    <button 
+                      onClick={handleExport}
+                      className="text-[10px] uppercase font-bold tracking-wider text-stone-400 hover:text-blue-600 transition-colors px-3 py-1.5 rounded-full hover:bg-blue-50 flex items-center gap-1"
+                      title="Copy to clipboard"
+                    >
+                      <Download size={12} /> Export
+                    </button>
+                    <button 
+                      onClick={handleRegenerate}
+                      disabled={isLoading}
+                      className="text-[10px] uppercase font-bold tracking-wider text-stone-400 hover:text-emerald-600 transition-colors px-3 py-1.5 rounded-full hover:bg-emerald-50 flex items-center gap-1 disabled:opacity-50"
+                      title="Regenerate with different approach"
+                    >
+                      <RotateCw size={12} /> Retry
+                    </button>
+                  </>
+                )}
+                <button 
+                  onClick={() => setMessages([])} 
+                  className="text-[10px] uppercase font-bold tracking-wider text-stone-400 hover:text-red-500 transition-colors px-3 py-1.5 rounded-full hover:bg-red-50"
+                >
+                  Clear
+                </button>
+              </div>
            </div>
            
            <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
